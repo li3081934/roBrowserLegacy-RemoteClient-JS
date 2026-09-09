@@ -20,8 +20,19 @@ class Grf {
 
 		try {
 			const fd = fs.openSync(this.filePath, "r");
-			this.grf = new GrfNode(fd);
+			this.grf = new GrfNode(fd, { filenameEncoding: 'auto' });
 			await this.grf.load();
+
+			// Auto-detection may pick utf-8 for GRFs with mostly-ASCII filenames,
+			// which mangles Korean (CP949) filenames into mojibake. If any bad
+			// filenames were produced, re-decode with CP949 so the file index
+			// matches the mojibake paths the client actually requests.
+			const stats = this.grf.getStats ? this.grf.getStats() : null;
+			if (stats && stats.badNameCount > 0) {
+				logger.debug(`${this.fileName}: bad filenames (${stats.badNameCount}), re-decoding as cp949`);
+				await this.grf.reloadWithEncoding('cp949');
+			}
+
 			this.loaded = true;
 		} catch (error) {
 			logger.error("Error loading GRF file:", error);

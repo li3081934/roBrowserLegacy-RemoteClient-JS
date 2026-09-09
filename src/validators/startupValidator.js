@@ -238,16 +238,27 @@ class StartupValidator {
     }
 
     const signature = this._trimNullTerminatedAscii(header.subarray(0, 16));
-    if (signature !== "Master of Magic") {
+    if (signature !== "Master of Magic" && signature !== "Event Horizon") {
       return { ok: false, reason: `Invalid signature: "${signature}"` };
     }
 
-    const tableOffset = header.readUInt32LE(30) >>> 0;
-    const seed = header.readUInt32LE(34) >>> 0;
-    const nFiles = header.readUInt32LE(38) >>> 0;
     const version = header.readUInt32LE(42) >>> 0;
 
-    const fileCount = Math.max(nFiles - seed - 7, 0);
+    let tableOffset;
+    let seed;
+    let fileCount;
+
+    if (version === 0x300) {
+      tableOffset = header.readUInt32LE(30) + header.readUInt32LE(34) * 0x100000000;
+      seed = 0;
+      fileCount = header.readUInt32LE(38) >>> 0;
+    } else {
+      tableOffset = header.readUInt32LE(30) >>> 0;
+      seed = header.readUInt32LE(34) >>> 0;
+      fileCount = Math.max((header.readUInt32LE(38) >>> 0) - seed - 7, 0);
+    }
+
+    const nFiles = header.readUInt32LE(38) >>> 0;
 
     return {
       ok: true,
@@ -404,7 +415,7 @@ class StartupValidator {
     const scanLimit =
       scanLimitEnv && /^\d+$/.test(scanLimitEnv) ? parseInt(scanLimitEnv, 10) : 0; // 0 = full
 
-    const fileTablePos = headerInfo.tableOffset + 46; // correct per spec
+    const fileTablePos = headerInfo.tableOffset + 46 + (headerInfo.version === 0x300 ? 4 : 0); // correct per spec
     const table = this._inflateFileTable(fd, fileTablePos);
     if (!table.ok) {
       return {

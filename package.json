@@ -20,7 +20,7 @@
 	"author": "Vincent Thibault",
 	"license": "GNU GPL V3",
 	"dependencies": {
-		"@chicowall/grf-loader": "^1.1.0",
+		"@chicowall/grf-loader": "file:../grf-loader",
 		"@chicowall/robrowser-esrgan": "file:../../robrowser-esrgan",
 		"compression": "^1.8.1",
 		"cors": "^2.8.5",
