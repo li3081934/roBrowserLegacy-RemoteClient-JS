@@ -1,0 +1,21 @@
+src/controllers/clientController.js
+  s_0c8d85037835d9::t_009411e5235dbb 28-29,33
+package.json
+  s_0c8d85037835d9::t_f59fe2abcc9f15 23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.2",
+  "base_commit_sha": "6da66e39c47077e8c872231c0da284085b97ec90",
+  "prompts": {},
+  "sessions": {
+    "s_0c8d85037835d9": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f7a547f41ffeaEMMJm3BZVVlXT",
+        "model": "unknown"
+      },
+      "human_author": "lijs8 <lijs8@lenovo.com>"
+    }
+  }
+}
