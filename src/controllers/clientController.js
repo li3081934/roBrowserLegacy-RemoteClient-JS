@@ -25,11 +25,12 @@ const PROJECT_ROOT = path.resolve(__dirname, '..', '..');
 /**
  * Top-level directories the client is allowed to read from disk.
  *
- * These are the Ragnarok client asset trees (the same ones .gitignore excludes).
+ * These are the Ragnarok client asset trees (the same ones .gitignore excludes,
+ * including the English SystemEN tree used by tryLoadLuaAliases).
  * The project root itself is NOT a document root: it also holds .env, .git/,
  * logs/ and the server source, none of which may ever be reachable over HTTP.
  */
-const SERVABLE_ROOTS = ['data', 'bgm', 'system', 'ai'];
+const SERVABLE_ROOTS = ['data', 'bgm', 'system', 'systemen', 'ai'];
 
 /**
  * Resolve a client-supplied path inside `base`, or return null if it escapes.
